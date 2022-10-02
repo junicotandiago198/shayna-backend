@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -29,7 +31,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.products.create');
     }
 
     /**
@@ -38,9 +40,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+            // Uniklo Tshirt
+            // uniklo-tshirt
+        
+        Product::create($data);
+        return redirect()->route('products.index');
     }
 
     /**
