@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ProductGallery;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductGalleryRequest;
 
-class ProductController extends Controller
+class ProductGalleryController extends Controller
 {
 
     public function __construct()
     {
         $this->middleware('auth');
     }
-
 
     /**
      * Display a listing of the resource.
@@ -25,10 +24,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        
-        return view('pages.admin.products.index')->with([
-            'products'  => $products
+        $items = ProductGallery::with('product')->get();
+
+        return view('pages.admin.product-galleries.index')->with([
+            'items' => $items
         ]);
     }
 
@@ -39,7 +38,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.products.create');
+        $products = Product::all();
+
+        return view('pages.admin.product-galleries.create')->with([
+            'products' => $products
+        ]);
     }
 
     /**
@@ -48,15 +51,17 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductGalleryRequest $request)
     {
         $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
+        $data['photo'] = $request->file('photo')->store(
+            'assets/product', 'public'
+        );
             // Uniklo Tshirt
             // uniklo-tshirt
         
-        Product::create($data);
-        return redirect()->route('products.index');
+        ProductGallery::create($data);
+        return redirect()->route('product-galleries.index');
     }
 
     /**
@@ -78,11 +83,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $item = Product::findOrFail($id);
-
-        return view('pages.admin.products.edit')->with([
-            'item'  => $item
-        ]);
+        //
     }
 
     /**
@@ -92,17 +93,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
-            // Uniklo Tshirt
-            // uniklo-tshirt
-        
-        $item = Product::findOrFail($id);
-        $item->update($data);
-
-        return redirect()->route('products.index');
+        //
     }
 
     /**
@@ -113,25 +106,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $item = Product::findOrFail($id);
+        $item = ProductGallery::findOrFail($id);
         $item->delete();
 
-        ProductGallery::where('products_id', $id)->delete();
-
-        return redirect()->route('products.index');
-    }
-
-    public function gallery(Request $request, $id)
-    {
-        $products = Product::findorFail($id);
-        $items = ProductGallery::with('product')
-                ->where('products_id', $id)
-                ->get();
-
-        return view('pages.admin.products.gallery')->with([
-            'products' => $products,
-            'items'   => $items
-        ]);
-        
+        return redirect()->route('product-galleries.index');
     }
 }

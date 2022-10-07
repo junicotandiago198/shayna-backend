@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductGalleryController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth']);
 
+Route::get('products/{id}/gallery', [ProductController::class, 'gallery'])->name('products.gallery');
 Route::resource('products', ProductController::class);
+
+Route::resource('product-galleries', ProductGalleryController::class);
 
 require __DIR__.'/auth.php';
