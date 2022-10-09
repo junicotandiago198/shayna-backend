@@ -17,7 +17,7 @@ class DashboardController extends Controller
     {
         $income = Transaction::where('transaction_status', 'SUCCESS')->sum('transaction_total');
         $sales = Transaction::count();
-        $item = Transaction::orderBy('id','DESC')->take(5)->get();
+        $items = Transaction::orderBy('id','DESC')->take(5)->get();
         $pie = [
             'pending' => Transaction::where('transaction_status', 'PENDING')->count(),
             'failed' => Transaction::where('transaction_status', 'FAILED')->count(),
@@ -27,7 +27,7 @@ class DashboardController extends Controller
         return view('pages.dashboard')->with([
             'income'  => $income,
             'sales'   => $sales,
-            'item'    => $item,
+            'items'    => $items,
             'pie'     => $pie
         ]);
     }
