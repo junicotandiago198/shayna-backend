@@ -30,6 +30,7 @@ class CheckoutRequest extends FormRequest
             'address'               => 'required',
             'transaction_total'     => 'required|integer',
             'transaction_status'    => 'nullable|string|in:PENDING,SUCCESS,FAILED',
+            'transaction_details'   => 'required|array',
             'transaction_details.*' =>  'integer|exists:products,id',
         ];
     }

@@ -15,6 +15,6 @@ class TransactionController extends Controller
         if($product)
             return ResponseFormatter::success($product, 'Data Transaksi berhasil diambil');
         else
-            return ResponseFormatter::error($product, 'Data Transaksi tidak ada', 404); 
+            return ResponseFormatter::error(null, 'Data Transaksi tidak ada', 404); 
     }
 }

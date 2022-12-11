@@ -23,8 +23,7 @@ class CheckoutController extends Controller
             $details[] = new TransactionDetail([
                 'transactions_id' => $transaction->id,
                 'products_id'   => $product,
-
-            ]);  
+            ]);
 
             Product::find($product)->decrement('quantity');
         }
