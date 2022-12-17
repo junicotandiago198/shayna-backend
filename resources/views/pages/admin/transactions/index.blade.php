@@ -44,6 +44,7 @@
                                                     </span>
 
                                             </td>
+                                            {{-- Kondisi jika transaksi statusnya pending akan muncuk button --}}
                                             <td>
                                                 @if($item->transaction_status == 'PENDING')
                                                     <a href="{{ route('transactions.status', $item->id) }}?status=SUCCESS" class="btn btn-success btn-sm">
